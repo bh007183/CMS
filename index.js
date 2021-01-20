@@ -1,5 +1,5 @@
 const inquirer = require("inquirer")
-const mysql = require("mysql")
+const mysql = require("mysql");
 const resources = require("./index.js")
 
 
@@ -15,7 +15,7 @@ function initialPrompt(){
     
 switch (ans.options) {
     case "View":
-        
+        viewPrompt()
         break;
 
     case "Add":
@@ -51,18 +51,17 @@ function viewPrompt(){
   }]).then(ans=>{
     switch (ans.addoptions) {
         case "View Departments":
-            
+            viewDepartments()
             
             break;
     
         case "View Roles":
-            
+            viewRole()
             
             break;
     
         case "View Employees":
-           
-            
+            initialPrompt()
             break;
     
         default: 
@@ -70,6 +69,27 @@ function viewPrompt(){
     } 
 
   })}
+
+  function viewDepartments(){
+      connection.query("SELECT * FROM departments", function(err,data){
+          if(err) throw err
+          console.table(data)
+          initialPrompt()
+      })
+  }
+  function viewRole(){
+      connection.query("SELECT * FROM role", function(err,data){
+        if(err) throw err
+          console.table(data)
+          initialPrompt()
+      })
+  }
+  function viewEmployee(){
+      connection.query("SELECT * FROM employee", function(err,data){
+          console.table(data)
+          initialPrompt()
+      })
+  }
 
 ///////Add/////////
 function addPrompt(){
