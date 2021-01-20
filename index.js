@@ -5,91 +5,85 @@ const resources = require("./index.js")
 
 
 
-/////////Initial Prompt//////////
-function initialPrompt(){
-  inquirer.prompt([{
-    type: "list",
-    name: "options",
-    choices: ["View", "Add", "Edit", "Quit"]
-  }]).then(ans=>{
-    
-switch (ans.options) {
-    case "View":
-        viewPrompt()
-        break;
+  /////////Initial Prompt//////////
+// function initialPrompt(){
+//     inquirer.prompt([{
+//       type: "list",
+//       name: "options",
+//       choices: ["View", "Add", "Edit", "Quit"]
+//     }]).then(ans=>{
+      
+//   switch (ans.options) {
+//       case "View":
+//           viewPrompt()
+//           break;
+  
+//       case "Add":
+  
+//           addPrompt()
+          
+//           break;
+  
+//       case "Edit":
+  
+//           editPrompt()
+          
+//           break;
+  
+//       case "Quit":
+//           console.log("Have a nice day!")
+//           connection.end()
+          
+//           break;
+  
+//       default:
+//           break;
+//   }    
+//   })
+//   }
+  
+//   exports.initialPrompt = initialPrompt
+  
+  ///////View/////////
+//   function viewPrompt(){
+//       inquirer.prompt([{
+//         type: "list",
+//         name: "viewoptions",
+//         choices: ["View Departments", "View Roles", "View Employees"]
+//     }]).then(ans=>{
+//       switch (ans.viewoptions) {
+//           case "View Departments":
+//             connection.query("SELECT * FROM department", function(err,data){
+//                 if(err) throw err
+//                 console.table(data)
+//                  initialPrompt()
+//             })
+              
+//               break;
+      
+//           case "View Roles":
+//             connection.query("SELECT * FROM role", function(err,data){
+//                 if(err) throw err
+//                   console.table(data)
+//                   initialPrompt()
+//               })
+              
+//               break;
+      
+//           case "View Employees":
+//             connection.query("SELECT * FROM employee", function(err,data){
+//                 console.table(data)
+//                 initialPrompt()
+//             })
+//               break;
+      
+//           default: 
+//               break;
+//       } 
+  
+//     })}
 
-    case "Add":
 
-        addPrompt()
-        
-        break;
-
-    case "Edit":
-
-        editPrompt()
-        
-        break;
-
-    case "Quit":
-        
-        break;
-
-    default:
-        break;
-}    
-})
-}
-
-exports.initialPrompt = initialPrompt
-
-///////View/////////
-function viewPrompt(){
-    inquirer.prompt([{
-      type: "list",
-      name: "viewoptions",
-      choices: ["View Departments", "View Roles", "View Employees"]
-  }]).then(ans=>{
-    switch (ans.addoptions) {
-        case "View Departments":
-            viewDepartments()
-            
-            break;
-    
-        case "View Roles":
-            viewRole()
-            
-            break;
-    
-        case "View Employees":
-            initialPrompt()
-            break;
-    
-        default: 
-            break;
-    } 
-
-  })}
-
-  function viewDepartments(){
-      connection.query("SELECT * FROM departments", function(err,data){
-          if(err) throw err
-          console.table(data)
-          initialPrompt()
-      })
-  }
-  function viewRole(){
-      connection.query("SELECT * FROM role", function(err,data){
-        if(err) throw err
-          console.table(data)
-          initialPrompt()
-      })
-  }
-  function viewEmployee(){
-      connection.query("SELECT * FROM employee", function(err,data){
-          console.table(data)
-          initialPrompt()
-      })
-  }
 
 ///////Add/////////
 function addPrompt(){
