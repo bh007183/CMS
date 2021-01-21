@@ -2,6 +2,7 @@ const inquirer = require("inquirer")
 const mysql = require("mysql");
 const view = require("./viewPrompt")
 const resources = require("./initialPrompt.js")
+const cTable = require('console.table')
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -30,6 +31,7 @@ function viewPrompt(){
               if(err) throw err
               console.table(data)
                resources.initialPrompt()
+               
           })
             
             break;
@@ -39,6 +41,7 @@ function viewPrompt(){
               if(err) throw err
                 console.table(data)
                 resources.initialPrompt()
+                
             })
             
             break;
@@ -47,6 +50,7 @@ function viewPrompt(){
           connection.query("SELECT * FROM employee", function(err,data){
               console.table(data)
               resources.initialPrompt()
+              
           })
             break;
     

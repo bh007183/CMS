@@ -3,7 +3,7 @@ const inquirer = require("inquirer")
 const mysql = require("mysql");
 const view = require("./viewPrompt")
 const resources = require("./initialPrompt.js")
-
+const cTable = require('console.table')
 var connection = mysql.createConnection({
     host: "localhost",
   
@@ -134,17 +134,17 @@ function addPrompt(){
         
         ]).then(ans=>{
           connection.query(
-            "INSERT INTO role SET ?",
+            "INSERT INTO employee SET ?",
             {
               first_name: ans.fName,
               last_name: ans.lName,
               role_id: ans.roleId,
-              manager_id: managerId
+              manager_id: ans.managerId
             },
             function(err, res) {
               if (err) throw err;
               console.log(res)
-              console.log(res.affectedRows + " department created!\n");
+              console.log(res.affectedRows + " Employee added!\n");
               resources.initialPrompt()
               // Call updateProduct AFTER the INSERT completes
               

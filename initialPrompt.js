@@ -3,6 +3,7 @@ const mysql = require("mysql");
 const view = require("./viewPrompt")
 const add = require("./addPrompt")
 const edit = require("./editPrompt")
+const cTable = require('console.table')
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -45,6 +46,8 @@ var connection = mysql.createConnection({
       case "Quit":
           console.log("Have a nice day!")
           connection.end()
+          
+         
           
           break;
   

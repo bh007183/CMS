@@ -3,6 +3,7 @@ const inquirer = require("inquirer")
 const mysql = require("mysql");
 const view = require("./viewPrompt")
 const resources = require("./initialPrompt.js")
+const cTable = require('console.table')
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -22,12 +23,37 @@ var connection = mysql.createConnection({
     inquirer.prompt([{
       type: "list",
       name: "editoptions",
-      choices: ["Edit Employee"]
+      choices: ["Edit Employee","Edit Departments"]
   }]).then(ans=>{
     switch (ans.editoptions) {
-        // case "Edit Departments":
+        case "Edit Departments":
             
-        //     break;
+        connection.query("select first_name, last_name from employee", (err, data)=>{
+            if (err){
+             throw err
+            }else{
+                const names = []
+                console.log(data)
+                data.forEach(element=>{names.push(element.first_name + " " + element.last_name)})
+            
+            inquirer.prompt([
+            {
+             type: "list",
+             message: "Which Employee would you like to edit?",
+             name: "first_name",
+             choices:names
+            }
+
+            ]).then(({names})=>{
+                console.log(ans)
+                console.log(names)
+
+            })
+        }
+
+    })
+    
+            break;
     
         // case "Edit Roles":
             
