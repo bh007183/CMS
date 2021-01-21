@@ -2,6 +2,19 @@ const inquirer = require("inquirer")
 const mysql = require("mysql");
 const resources = require("./index.js")
 
+var connection = mysql.createConnection({
+    host: "localhost",
+  
+    // Your port; if not 3306
+    port: 3306,
+  
+    // Your username
+    user: "root",
+  
+    // Your password
+    password: "password",
+    database: "employee_db"
+  });
 
 
 
@@ -86,33 +99,33 @@ const resources = require("./index.js")
 
 
 ///////Add/////////
-function addPrompt(){
-    inquirer.prompt([{
-      type: "list",
-      name: "addoptions",
-      choices: ["Add Departments", "Add Roles", "Add Employees"]
-  }]).then(ans=>{
-    switch (ans.addoptions) {
-        case "Add Departments":
-            addDepartments()
+// function addPrompt(){
+//     inquirer.prompt([{
+//       type: "list",
+//       name: "addoptions",
+//       choices: ["Add Departments", "Add Roles", "Add Employees"]
+//   }]).then(ans=>{
+//     switch (ans.addoptions) {
+//         case "Add Departments":
+//             addDepartments()
             
-            break;
+//             break;
     
-        case "Add Roles":
-            addRoles()
+//         case "Add Roles":
+//             addRoles()
             
-            break;
+//             break;
     
-        case "Add Employees":
-            addEmployees()
+//         case "Add Employees":
+//             addEmployees()
             
-            break;
+//             break;
     
-        default: 
-            break;
-    }  
+//         default: 
+//             break;
+//     }  
 
-  })}
+//   })}
 
 ///////Edit/////////
 function editPrompt(){
@@ -153,14 +166,33 @@ function editEmployeePrompt(){
 
 
 ////////////////ADDING DEPARTMENTS//////////////
-function addDepartments(){
-    inquirer.prompt([{
-      type: "input",
-      name: "departmentName",
-      message: "What is the name of the department?"
-  }]).then(ans=>{
-      console.log(departmentName)
-  })}
+function addingDepartment(name, id){
+  
+
+    connection.query(
+        "INSERT INTO department SET ?",
+        {
+          name: this.name,
+          id: this.id,
+        },
+        function(err, res) {
+          if (err) throw err;
+          console.log(res.affectedRows + " department created!\n");
+          // Call updateProduct AFTER the INSERT completes
+          
+        }
+      )
+
+
+}
+
+
+
+
+
+
+ 
+  
 ////////////////ADDING ROLES///////////////////
 function addRoles(){
     inquirer.prompt([{
