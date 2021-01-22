@@ -27,6 +27,7 @@ var connection = mysql.createConnection({
     if (err) throw err;
     console.table(data)
     resources.initialPrompt()
+    connection.end()
     })
     
     

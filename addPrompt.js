@@ -4,7 +4,15 @@ const mysql = require("mysql");
 const view = require("./viewPrompt")
 const resources = require("./initialPrompt.js")
 const cTable = require('console.table')
-var connection = mysql.createConnection({
+
+
+
+
+
+
+function addPrompt(){
+
+  var connection = mysql.createConnection({
     host: "localhost",
   
     // Your port; if not 3306
@@ -18,11 +26,6 @@ var connection = mysql.createConnection({
     database: "employee_db"
   });
 
-
-
-
-
-function addPrompt(){
     inquirer.prompt([{
       type: "list",
       name: "addoptions",
@@ -52,6 +55,7 @@ function addPrompt(){
                   if (err) throw err;
                   console.log(res.affectedRows + " department created!\n");
                   resources.initialPrompt()
+                  connection.end()
                   // Call updateProduct AFTER the INSERT completes
                   
                 }
@@ -62,11 +66,17 @@ function addPrompt(){
             break;
     
         case "Add Roles":
+          connection.query("SELECT * FROM department", (err,data)=>{
+            const departmentArray = []
+            for(let i = 0; i < data.length; i++){
+              departmentArray.push(data[i].id + " " + data[i].name)
+            }
+          
           inquirer.prompt([
             {
             type: "input",
             name: "roleTitle",
-            message: "What is the role title new role?"
+            message: "What is the title for the new role?"
           },
             {
               type: "input",
@@ -75,36 +85,47 @@ function addPrompt(){
       
             },
             {
-              type: "input",
+              type: "list",
               name: "roleId",
-              message: "What is the department id this role is associated with?"
+              message: "What is the department id this role is associated with?",
+              choices: departmentArray
       
             }
             
         ]).then(ans=>{
+          const rightId = ans.roleId.split(" ")
           connection.query(
+          
             "INSERT INTO role SET ?",
             {
               title: ans.roleTitle,
               salary: ans.roleSalary,
-              department_id: ans.roleId
+              department_id: rightId[0]
             },
             function(err, res) {
               if (err) throw err;
               console.log(res)
               console.log(res.affectedRows + " Role created!\n");
               resources.initialPrompt()
+              connection.end()
               // Call updateProduct AFTER the INSERT completes
               
             }
           )
     
           })
+        })
 
             
             break;
     
         case "Add Employees":
+          connection.query("SELECT role.title, role.id FROM role", (err, data)=>{
+            const employeetArray = []
+           
+            for(let i = 0; i < data.length; i++){
+              employeetArray.push(data[i].title + " " + data[i].id)
+            }
           
             inquirer.prompt([
                 {
@@ -119,9 +140,10 @@ function addPrompt(){
         
               },
               {
-                type: "input",
+                type: "list",
                 name: "roleId",
-                message: "What is the Employees role id?"
+                message: "What is the Employees role id?",
+                choices: employeetArray
         
               },
               {
@@ -133,12 +155,13 @@ function addPrompt(){
         
         
         ]).then(ans=>{
+          const valueArray = ans.roleId.split(" ")
           connection.query(
             "INSERT INTO employee SET ?",
             {
               first_name: ans.fName,
               last_name: ans.lName,
-              role_id: ans.roleId,
+              role_id: valueArray[1],
               manager_id: ans.managerId
             },
             function(err, res) {
@@ -146,11 +169,13 @@ function addPrompt(){
               console.log(res)
               console.log(res.affectedRows + " Employee added!\n");
               resources.initialPrompt()
+              connection.end()
               // Call updateProduct AFTER the INSERT completes
               
             }
           )
           })
+        })
             
             break;
     

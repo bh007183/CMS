@@ -26,7 +26,8 @@ CREATE TABLE employee (
   role_id INT (10) NOT NULL,
   manager_id INT (10) DEFAULT NULL,
   PRIMARY KEY (id),
-  FOREIGN KEY (role_id) references role(id)
+  FOREIGN KEY (role_id) references role(id),
+  FOREIGN KEY (Managment) references employee(id)
 );
 
 INSERT INTO department (name) VALUES ( "Accounting"), ( "Operations"), ( "Costumer Service"), ( "Managment");

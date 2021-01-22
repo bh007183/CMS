@@ -5,77 +5,78 @@ const view = require("./viewPrompt")
 const resources = require("./initialPrompt.js")
 const cTable = require('console.table')
 
-var connection = mysql.createConnection({
-    host: "localhost",
-  
-    // Your port; if not 3306
-    port: 3306,
-  
-    // Your username
-    user: "root",
-  
-    // Your password
-    password: "password",
-    database: "employee_db"
-  });
 
   function editPrompt(){
-    inquirer.prompt([{
+
+    var connection = mysql.createConnection({
+      host: "localhost",
+    
+      // Your port; if not 3306
+      port: 3306,
+    
+      // Your username
+      user: "root",
+    
+      // Your password
+      password: "password",
+      database: "employee_db"
+    });
+
+    connection.query("SELECT first_name, last_name, id  FROM employee", function(err,data){
+      if (err) throw err
+      const nameArray = []
+      for (let i = 0; i < data.length; i++){
+        data[i].first_name + " " + data[i].last_name
+        nameArray.push(data[i].first_name + " " + data[i].last_name + " " + data[i].id) 
+      }
+      
+      // connection.query("SELECT id, title FROM role", function(err,data){
+      //   const roleArray = []
+      // for (let i = 0; i < data.length; i++){
+      //   roleArray.push(data[i].id + " " + data[i].title) 
+      // }
+      // }),
+    inquirer.prompt([
+      {
       type: "list",
       name: "editoptions",
-      choices: ["Edit Employee's Role"]
-  }]).then(ans=>{
-    switch (ans.editoptions) {
-
-        case "Edit Employee's Role":
-          connection.query(
-            "INSERT INTO role SET ?",
-            {
-              first_name: ans.fName,
-              last_name: ans.lName,
-              role_id: ans.roleId,
-              manager_id: managerId
-            },
-            function(err, res) {
-              if (err) throw err;
-              console.log(res)
-              console.log(res.affectedRows + " department created!\n");
-              // Call updateProduct AFTER the INSERT completes
-              
-            }
-          )
-          
-          break;
-
-        case "Edit Employee's manager ID":
-          connection.query(
-            "INSERT INTO role SET ?",
-            {
-              first_name: ans.fName,
-              last_name: ans.lName,
-              role_id: ans.roleId,
-              manager_id: managerId
-            },
-            function(err, res) {
-              if (err) throw err;
-              console.log(res)
-              console.log(res.affectedRows + " department created!\n");
-              // Call updateProduct AFTER the INSERT completes
-              
-            }
-          )
-          
-          break;
-      
-        default:
-          break;
+      choices:nameArray
+      },
+      {
+      type: "input",
+      name: "newRole",
+      Message: "input employees new Role Id."
       }
-              console.log(ans.emprole)
+     ])
+    
+    .then(ans=>{
+      const splitArray = ans.editoptions.split(" ") 
+        
+  connection.query("UPDATE employee SET ? where ?",[
+            {
+              role_id: ans.newRole,
+            },
+            {
+              id: splitArray[2]
+            }
+          ],
+            function(err, res) {
+              if (err) throw err;
+              console.log(res)
+              
+              console.log(res.affectedRows + " employee role changed!\n");
+              resources.initialPrompt()
+              connection.end()
+              // Call updateProduct AFTER the INSERT completes
+              
+            }
+          )
+          
           })
-            
+        })
           
     }  
 
-  })}
+
 
   exports.editPrompt = editPrompt
