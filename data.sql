@@ -27,13 +27,13 @@ CREATE TABLE employee (
   manager_id INT (10) DEFAULT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (role_id) references role(id),
-  FOREIGN KEY (Managment) references employee(id)
+  FOREIGN KEY (manager_id) references employee(id)
 );
 
 INSERT INTO department (name) VALUES ( "Accounting"), ( "Operations"), ( "Costumer Service"), ( "Managment");
 
 
-INSERT INTO role (title, salary, separtment_id) VALUES ("Clerk", 40000, 1), ("Grounds Keeper", 50000, 2), ("Returns", 60000, 3),("Engineer", 50000, 4);
+INSERT INTO role (title, salary, department_id) VALUES ("Clerk", 40000, 1), ("Grounds Keeper", 50000, 2), ("Returns", 60000, 3),("Engineer", 50000, 4);
 
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("Erika", "Jones", 1, 1 ), ("Jack", "Fran", 2, 1 ), ("Kellie", "McDanials", 3, 1 ), ("Xu", "Lee", 4, 1 );

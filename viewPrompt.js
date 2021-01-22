@@ -4,20 +4,6 @@ const view = require("./viewPrompt")
 const resources = require("./initialPrompt.js")
 const cTable = require('console.table')
 
-// var connection = mysql.createConnection({
-//     host: "localhost",
-  
-//     // Your port; if not 3306
-//     port: 3306,
-  
-//     // Your username
-//     user: "root",
-  
-//     // Your password
-//     password: "password",
-//     database: "employee_db"
-//   });
-
 
 
 function viewPrompt(){
@@ -38,9 +24,22 @@ function viewPrompt(){
     inquirer.prompt([{
       type: "list",
       name: "viewoptions",
-      choices: ["View Departments", "View Roles", "View Employees"]
+      choices: ["View Whole List", "View Departments", "View Roles", "View Employees"]
   }]).then(ans=>{
     switch (ans.viewoptions) {
+        case "View Whole List":
+          connection.query("SELECT employee.id, employee.first_name, employee.last_name, employee.manager_id, role.title, role.salary, department.name FROM employee JOIN role ON employee.role_id = role.id JOIN department ON department.id = role.department_id ORDER by employee.id", function(err, data){
+            if (err) throw err;
+            console.table(data)
+            resources.initialPrompt()
+            connection.end()
+            
+               
+               
+          })
+            
+            break;
+
         case "View Departments":
           connection.query("SELECT * FROM department", function(err,data){
               if(err) throw err
