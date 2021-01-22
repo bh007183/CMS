@@ -30,12 +30,12 @@ const cTable = require('console.table')
         nameArray.push(data[i].first_name + " " + data[i].last_name + " " + data[i].id) 
       }
       
-      // connection.query("SELECT id, title FROM role", function(err,data){
-      //   const roleArray = []
-      // for (let i = 0; i < data.length; i++){
-      //   roleArray.push(data[i].id + " " + data[i].title) 
-      // }
-      // }),
+      connection.query("SELECT id, title FROM role", function(err,data){
+        const roleArray = []
+      for (let i = 0; i < data.length; i++){
+        roleArray.push(data[i].id + " " + data[i].title) 
+      }
+      
     inquirer.prompt([
       {
       type: "list",
@@ -43,18 +43,20 @@ const cTable = require('console.table')
       choices:nameArray
       },
       {
-      type: "input",
+      type: "list",
       name: "newRole",
-      Message: "input employees new Role Id."
+      Message: "input employees new Role Id.",
+      choices:roleArray
       }
      ])
     
     .then(ans=>{
       const splitArray = ans.editoptions.split(" ") 
+      const split2Array = ans.newRole.split(" ")
         
   connection.query("UPDATE employee SET ? where ?",[
             {
-              role_id: ans.newRole,
+              role_id: split2Array[0],
             },
             {
               id: splitArray[2]
@@ -73,6 +75,8 @@ const cTable = require('console.table')
           )
           
           })
+
+        })
         })
           
     }  
